@@ -16,6 +16,7 @@ Long description of module's purpose
 
     'data': [
         'views/views.xml',
+        "security/ir.model.access.csv"
     ],
     
 }

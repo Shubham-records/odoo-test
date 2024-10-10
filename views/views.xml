@@ -1,19 +1,34 @@
 <odoo>
 	<data>
-		<record id="view_hr_employee_inherit" model="ir.ui.view">
+		# tree view
+		<record id="view_hr_employee_tree_inherit" model="ir.ui.view">
+		    <field name="name">hr.employee.tree.inherit</field>
+		    <field name="model">hr.employee</field>
+		    <field name="inherit_id" ref="hr.view_employee_tree"/>
+		    <field name="arch" type="xml">
+		        <xpath expr="//tree/field[@name='department_id']" position="after">
+		            <field name="marital_ShubCreated" optional="show"/>
+		        </xpath>
+		    </field>
+		</record>
+		
+		# form view
+
+		<record id="view_hr_employee_form_inherit" model="ir.ui.view">
 			<field name="name">hr.employee.form.inherit</field>
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr.view_employee_form"/>
             <field name="arch" type="xml">
             	 <xpath expr="//form/sheet/notebook/page/group/group[@name='identification_group']" position="after">
-            	 	<group string="Family Status">
-            	 		<field name="marital"/>
-                        <field name="spouse_complete_name" invisible="marital not in ['married', 'cohabitant']"/>
-                        <field name="spouse_birthdate" invisible="marital not in ['married', 'cohabitant']"/>
-                        <field name="children"/>
+            	 	<group string="Family Status Shub Created">
+            	 		<field name="marital_ShubCreated"/>
+                        <field name="spouse_complete_name_ShubCreated" invisible="marital_ShubCreated not in ['married', 'cohabitant']"/>
+                        <field name="spouse_birthdate_ShubCreated" invisible="marital_ShubCreated not in ['married', 'cohabitant']"/>
+                        <field name="children_ShubCreated"/>
             	 	</group>
             	 </xpath>
 			</field>
 		</record>
+		
 	</data>
 </odoo>
