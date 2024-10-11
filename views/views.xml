@@ -1,34 +1,57 @@
 <odoo>
-	<data>
-		# tree view
-		<record id="view_hr_employee_tree_inherit" model="ir.ui.view">
-		    <field name="name">hr.employee.tree.inherit</field>
-		    <field name="model">hr.employee</field>
-		    <field name="inherit_id" ref="hr.view_employee_tree"/>
-		    <field name="arch" type="xml">
-		        <xpath expr="//tree/field[@name='department_id']" position="after">
-		            <field name="marital_ShubCreated" optional="show"/>
-		        </xpath>
-		    </field>
-		</record>
-		
-		# form view
+    <data>
+        <record id="view_hr_employee_tree_inherit" model="ir.ui.view">
+            <field name="name">hr.employee.tree.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='department_id']" position="after">
+                    <field name="marital_ShubCreated" optional="show"/>
+                </xpath>
+            </field>
+        </record>
 
-		<record id="view_hr_employee_form_inherit" model="ir.ui.view">
-			<field name="name">hr.employee.form.inherit</field>
+        <record id="view_hr_employee_form_inherit" model="ir.ui.view">
+            <field name="name">hr.employee.form.inherit</field>
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr.view_employee_form"/>
             <field name="arch" type="xml">
-            	 <xpath expr="//form/sheet/notebook/page/group/group[@name='identification_group']" position="after">
-            	 	<group string="Family Status Shub Created">
-            	 		<field name="marital_ShubCreated"/>
-                        <field name="spouse_complete_name_ShubCreated" invisible="marital_ShubCreated not in ['married', 'cohabitant']"/>
-                        <field name="spouse_birthdate_ShubCreated" invisible="marital_ShubCreated not in ['married', 'cohabitant']"/>
-                        <field name="children_ShubCreated"/>
-            	 	</group>
-            	 </xpath>
-			</field>
-		</record>
-		
-	</data>
+                <xpath expr="//form/sheet/notebook/page/group/group[@name='identification_group']" position="after">
+                    <group string="Family Status Shub Created">
+                        <label for="marital_ShubCreated" string="Marital Status"/>
+                        <field name="marital_ShubCreated" string="Marital Status"/>
+
+                        <label for="spouse_complete_name_ShubCreated" string="Spouse Complete Name"
+                               invisible="not (marital_ShubCreated in ['married', 'cohabitant'])"/>
+                        <field name="spouse_complete_name_ShubCreated" 
+                               invisible="not (marital_ShubCreated in ['married', 'cohabitant'])" 
+                               string="Spouse Complete Name"/>
+
+                        <label for="spouse_birthdate_ShubCreated" string="Spouse DOB"
+                               invisible="not (marital_ShubCreated in ['married', 'cohabitant'])"/>
+                        <field name="spouse_birthdate_ShubCreated" 
+                               invisible="not (marital_ShubCreated in ['married', 'cohabitant'])" 
+                               string="Spouse DOB"/>
+
+                        <label for="children_ShubCreated" string="Number of Children"/>
+                        <field name="children_ShubCreated" string="Number of Children"/>
+
+                        <group string="Children Details" invisible="children_ShubCreated == 0">
+                            <field name="children_ids" widget="one2many_list">
+                                <group>
+                                    <field name="name" string="Child Name" required="1"/>
+                                    <field name="gender" string="Gender" required="1"/>
+                                </group>
+                            </field>
+                        </group>
+
+                        <!-- <group string="Children Details" invisible="children_ShubCreated == 0">
+                            <field name="name" widget="text" placeholder="Enter child names separated by commas"/>
+                            <field name="gender" widget="text" placeholder="Enter child genders separated by commas"/>
+                        </group> -->
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
 </odoo>
