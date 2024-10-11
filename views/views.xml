@@ -37,18 +37,32 @@
                         <field name="children_ShubCreated" string="Number of Children"/>
 
                         <group string="Children Details" invisible="children_ShubCreated == 0">
+                            <field name="child_name_1" string="Child Name 1"/>
+                            <field name="child_gender_1" string="Child Gender 1"/>
+                            
+                            <field name="child_name_2" string="Child Name 2" invisible="children_ShubCreated in ['0', '1']"/>
+                            <field name="child_gender_2" string="Child Gender 2" invisible="children_ShubCreated in ['0', '1']"/>
+
+                            <field name="child_name_3" string="Child Name 3" invisible="children_ShubCreated in ['0', '1', '2']"/>
+                            <field name="child_gender_3" string="Child Gender 3" invisible="children_ShubCreated in ['0', '1', '2']"/>
+
+                            <field name="child_name_4" string="Child Name 4" invisible="children_ShubCreated in ['0', '1', '2', '3']"/>
+                            <field name="child_gender_4" string="Child Gender 4" invisible="children_ShubCreated in ['0', '1', '2', '3']"/>
+
+                            <field name="child_name_5" string="Child Name 5" invisible="children_ShubCreated in ['0', '1', '2', '3', '4']"/>
+                            <field name="child_gender_5" string="Child Gender 5" invisible="children_ShubCreated in ['0', '1', '2', '3', '4']"/>
+                        </group>
+
+
+                        <!-- <group string="Children Details" invisible="children_ShubCreated == 0">
                             <field name="children_ids" widget="one2many_list">
                                 <group>
                                     <field name="name" string="Child Name" required="1"/>
                                     <field name="gender" string="Gender" required="1"/>
                                 </group>
                             </field>
-                        </group>
-
-                        <!-- <group string="Children Details" invisible="children_ShubCreated == 0">
-                            <field name="name" widget="text" placeholder="Enter child names separated by commas"/>
-                            <field name="gender" widget="text" placeholder="Enter child genders separated by commas"/>
                         </group> -->
+
                     </group>
                 </xpath>
             </field>

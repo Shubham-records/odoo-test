@@ -1,18 +1,5 @@
 from odoo import models, fields, api
 
-class Child(models.Model):
-    _name = 'employee.child'
-    _description = 'Child Details'
-
-    name = fields.Char(string='Child Name', required=True)
-    gender = fields.Selection([
-        ('male', 'Male'),
-        ('female', 'Female'),
-        ('other', 'Other')
-    ], string='Gender', required=True)
-    employee_id = fields.Many2one('hr.employee', string='Employee')
-
-
 class InheritModuleTestShub(models.Model):
     _inherit = 'hr.employee'
 
@@ -26,47 +13,105 @@ class InheritModuleTestShub(models.Model):
 
     spouse_complete_name_ShubCreated = fields.Char(string="Spouse Complete Name", groups="hr.group_hr_user", tracking=True)
     spouse_birthdate_ShubCreated = fields.Date(string="Spouse Birthdate", groups="hr.group_hr_user", tracking=True)
-    children_ShubCreated = fields.Integer(string='Number of Dependent Children', groups="hr.group_hr_user", tracking=True)
-
-    children_ids = fields.One2many('employee.child', 'employee_id', string='Children')
-
-    @api.onchange('children_ShubCreated')
-    def _onchange_children_ShubCreated(self):
-        if self.children_ShubCreated >= 0:
-            existing_lines = len(self.children_ids)
-            if self.children_ShubCreated > existing_lines:
-                for _ in range(self.children_ShubCreated - existing_lines):
-                    self.children_ids.new({'name': '', 'gender': 'male'})
+    children_ShubCreated = fields.Selection([
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
+    ],string='Number of Dependent Children', groups="hr.group_hr_user", tracking=True)
 
 
+    child_name_1 = fields.Char(string='Child Name 1')
+    child_gender_1 = fields.Selection([
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other')
+    ], string='Child Gender 1')
+
+    child_name_2 = fields.Char(string='Child Name 2')
+    child_gender_2 = fields.Selection([
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other')
+    ], string='Child Gender 2')
+
+    child_name_3 = fields.Char(string='Child Name 3')
+    child_gender_3 = fields.Selection([
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other')
+    ], string='Child Gender 3')
+
+    child_name_4 = fields.Char(string='Child Name 4')
+    child_gender_4 = fields.Selection([
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other')
+    ], string='Child Gender 4')
+
+    child_name_5 = fields.Char(string='Child Name 5')
+    child_gender_5 = fields.Selection([
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other')
+    ], string='Child Gender 5')
 
 
 
 
 
-    # names = fields.Text(string='Child Names', default='', required=False)
-    # genders = fields.Text(string='Child Genders', default='', required=False)
 
     # @api.onchange('children_ShubCreated')
     # def _onchange_children_ShubCreated(self):
-    #     self.children_ShubCreated = max(self.children_ShubCreated, 0)
+    #     self.child_name_1 = False
+    #     self.child_gender_1 = False
+    #     self.child_name_2 = False
+    #     self.child_gender_2 = False
+    #     self.child_name_3 = False
+    #     self.child_gender_3 = False
+        
+    #     if self.children_ShubCreated == '1':
+    #         self.child_name_1 = ''
+    #         self.child_gender_1 = ''
+    #     if self.children_ShubCreated == '2':
+    #         self.child_name_2 = ''
+    #         self.child_gender_2 = ''
+    #     if self.children_ShubCreated == '3':
+    #         self.child_name_3 = ''
+    #         self.child_gender_3 = ''
 
-    #     names = [name.strip() for name in self.names.split(',')] if self.names else []
-    #     genders = [gender.strip() for gender in self.genders.split(',')] if self.genders else []
 
-    #     if self.children_ShubCreated > len(names):
-    #         names += [''] * (self.children_ShubCreated - len(names))
-    #     elif self.children_ShubCreated < len(names):
-    #         names = names[:self.children_ShubCreated]
 
-    #     if self.children_ShubCreated > len(genders):
-    #         genders += [''] * (self.children_ShubCreated - len(genders))
-    #     elif self.children_ShubCreated < len(genders):
-    #         genders = genders[:self.children_ShubCreated]
 
-    #     # Update the fields with adjusted lists
-    #     self.names = ', '.join(names)
-    #     self.genders = ', '.join(genders)
 
-            
-            
+
+
+
+
+
+
+# class Child(models.Model):
+#     _name = 'employee.child'
+#     _description = 'Child Details'
+
+#     name = fields.Char(string='Child Name', required=True)
+#     gender = fields.Selection([
+#         ('male', 'Male'),
+#         ('female', 'Female'),
+#         ('other', 'Other')
+#     ], string='Gender', required=True)
+#     employee_id = fields.Many2one('hr.employee', string='Employee', ondelete='cascade')
+
+
+
+
+# children_ids = fields.One2many('employee.child', 'employee_id', string='Children')
+
+#     @api.onchange('children_ShubCreated')
+#     def _onchange_children_ShubCreated(self):
+#         if self.children_ShubCreated >= 0:
+#             existing_lines = len(self.children_ids)
+#             if self.children_ShubCreated > existing_lines:
+#                 for _ in range(self.children_ShubCreated - existing_lines):
+#                     self.children_ids.new({'name': '', 'gender': 'male'})
