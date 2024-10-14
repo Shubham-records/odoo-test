@@ -34,7 +34,6 @@ class InheritModuleTestShub(models.Model):
             ], string=f'Child Gender {i}')
         return child_fields
 
-    # Adding fields to the class
     locals().update(_create_child_fields(None))
 
 
