@@ -1,5 +1,5 @@
 {
-    'name': "InheritModuleTestShub",
+    'name': "InheritModuleTestSHUB",
 
     'summary': "Short (1 phrase/line) summary of the module's purpose",
 
@@ -7,7 +7,7 @@
 Long description of module's purpose
     """,
 
-    'author': "My Company",
+    'author': "shub",
 
     'category': 'Uncategorized',
     'version': '0.1',

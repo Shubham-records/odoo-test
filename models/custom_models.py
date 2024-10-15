@@ -23,56 +23,145 @@ class InheritModuleTestShub(models.Model):
         ('4', '4'),
         ('5', '5'),
     ], string='Number of Dependent Children', groups="hr.group_hr_user", tracking=True)
-
-    def _create_child_fields(self):
-        for i in range(1, 6):
-            setattr(self.__class__, f'child_name_{i}', fields.Char(string=f'Child Name {i}'))
-            setattr(self.__class__, f'child_gender_{i}', fields.Selection([
-                ('male', 'Male'),
-                ('female', 'Female'),
-                ('other', 'Other')
-            ], string=f'Child Gender {i}'))
-
-    @api.model
-    def init(self):
-        self._create_child_fields()
+    
+ 
+    for i in range(1, 6):
+        locals()[f'child_name_{i}'] = fields.Char(string=f'Child Name {i}')
+        locals()[f'child_gender_{i}'] = fields.Selection([
+            ('male', 'Male'),
+            ('female', 'Female'),
+            ('other', 'Other')
+        ], string=f'Child Gender {i}')
 
 
     @api.model
     def create(self, vals):
         result = super(InheritModuleTestShub, self).create(vals)
-        inherit_id = self.env.ref('hr.view_employee_form')
-        arch_base = ("""<?xml version="1.0"?>
-                            <xpath expr="//form/sheet/notebook/page/group/group[@string='Family Status Shub Created']" position="after">
-                            <separator/>
-                            <group string="Children Details" invisible="children_ShubCreated == 0">
-                            <field name="child_name_1" string="Child Name 1"/>
-                            <field name="child_gender_1" string="Child Gender 1"/>
-                            
-                            <field name="child_name_2" string="Child Name 2" invisible="children_ShubCreated in ['0', '1']"/>
-                            <field name="child_gender_2" string="Child Gender 2" invisible="children_ShubCreated in ['0', '1']"/>
-
-                            <field name="child_name_3" string="Child Name 3" invisible="children_ShubCreated in ['0', '1', '2']"/>
-                            <field name="child_gender_3" string="Child Gender 3" invisible="children_ShubCreated in ['0', '1', '2']"/>
-
-                            <field name="child_name_4" string="Child Name 4" invisible="children_ShubCreated in ['0', '1', '2', '3']"/>
-                            <field name="child_gender_4" string="Child Gender 4" invisible="children_ShubCreated in ['0', '1', '2', '3']"/>
-
-                            <field name="child_name_5" string="Child Name 5" invisible="children_ShubCreated in ['0', '1', '2', '3', '4']"/>
-                            <field name="child_gender_5" string="Child Gender 5" invisible="children_ShubCreated in ['0', '1', '2', '3', '4']"/>
-                        </group>
-                            <separator/>
-                            </xpath>
-                            """)
-        value = {'name': 'child_name_1',
-                    'type': 'group',
-                    'model': 'hr.employee',
-                    'mode': 'extension',
-                    'inherit_id': inherit_id.id,
-                    'arch_base': arch_base,
-                    'active': True}
-        self.env['ir.ui.view'].sudo().create(value)
+        self._update_view()
         return result
+
+    @api.onchange('children_ShubCreated')
+    def _update_view(self):
+        inherit_id = self.env.ref('hr.view_employee_form')
+        arch_base = """
+            <xpath expr="//form/sheet/notebook/page/group/group[@name='identification_group']" position="after">
+                <group name='Children_Details' string="Children Details" attrs="{'invisible': [('children_ShubCreated', '=', '0')]}">
+        """
+        for i in range(1, 6):
+            arch_base += f"""
+                    <field name="child_name_{i}" attrs="{{'invisible': [('children_ShubCreated', 'in', ['j' for j in range(i)])]}}"/>
+                    <field name="child_gender_{i}" attrs="{{'invisible': [('children_ShubCreated', 'in', ['j' for j in range(i)])]}}"/>
+            """
+        arch_base += """
+                </group>
+            </xpath>
+        """
+        
+        existing_view = self.env['ir.ui.view'].sudo().search([
+            ('name', '=', 'child_details_dynamic'),
+            ('model', '=', 'hr.employee'),
+            ('type', '=', 'form'),
+        ])
+
+        if existing_view:
+            existing_view.write({
+                'arch_base': arch_base,
+            })
+        else:
+            self.env['ir.ui.view'].sudo().create({
+                'name': 'child_details_dynamic',
+                'type': 'form',
+                'model': 'hr.employee',
+                'mode': 'extension',
+                'inherit_id': inherit_id.id,
+                'arch_base': arch_base,
+                'active': True
+            })
+
+
+
+
+
+
+
+
+
+
+# from odoo import models, fields, api
+# from lxml import etree
+
+# class InheritModuleTestShub(models.Model):
+#     _inherit = 'hr.employee'
+
+#     marital_ShubCreated = fields.Selection([
+#         ('single', 'Single'),
+#         ('married', 'Married'),
+#         ('cohabitant', 'Legal Cohabitant'),
+#         ('widower', 'Widower'),
+#         ('divorced', 'Divorced')
+#     ], string='Marital Status', groups="hr.group_hr_user", default='single', tracking=True)
+
+#     spouse_complete_name_ShubCreated = fields.Char(string="Spouse Complete Name", groups="hr.group_hr_user", tracking=True)
+#     spouse_birthdate_ShubCreated = fields.Date(string="Spouse Birthdate", groups="hr.group_hr_user", tracking=True)
+
+#     children_ShubCreated = fields.Selection([
+#         ('0', '0'),
+#         ('1', '1'),
+#         ('2', '2'),
+#         ('3', '3'),
+#         ('4', '4'),
+#         ('5', '5'),
+#     ], string='Number of Dependent Children', groups="hr.group_hr_user", tracking=True)
+
+#     def _create_child_fields(self):
+#         for i in range(1, 6):
+#             setattr(self.__class__, f'child_name_{i}', fields.Char(string=f'Child Name {i}'))
+#             setattr(self.__class__, f'child_gender_{i}', fields.Selection([
+#                 ('male', 'Male'),
+#                 ('female', 'Female'),
+#                 ('other', 'Other')
+#             ], string=f'Child Gender {i}'))
+
+#     @api.model
+#     def init(self):
+#         self._create_child_fields()
+
+
+#     @api.model
+#     def create(self, vals):
+#         result = super(InheritModuleTestShub, self).create(vals)
+#         inherit_id = self.env.ref('hr.view_employee_form')
+#         arch_base = ("""<?xml version="1.0"?>
+#                             <xpath expr="//form/sheet/notebook/page/group/group[@string='Family Status Shub Created']" position="after">
+#                             <separator/>
+#                             <group string="Children Details" invisible="children_ShubCreated == 0">
+#                             <field name="child_name_1" string="Child Name 1"/>
+#                             <field name="child_gender_1" string="Child Gender 1"/>
+                            
+#                             <field name="child_name_2" string="Child Name 2" invisible="children_ShubCreated in ['0', '1']"/>
+#                             <field name="child_gender_2" string="Child Gender 2" invisible="children_ShubCreated in ['0', '1']"/>
+
+#                             <field name="child_name_3" string="Child Name 3" invisible="children_ShubCreated in ['0', '1', '2']"/>
+#                             <field name="child_gender_3" string="Child Gender 3" invisible="children_ShubCreated in ['0', '1', '2']"/>
+
+#                             <field name="child_name_4" string="Child Name 4" invisible="children_ShubCreated in ['0', '1', '2', '3']"/>
+#                             <field name="child_gender_4" string="Child Gender 4" invisible="children_ShubCreated in ['0', '1', '2', '3']"/>
+
+#                             <field name="child_name_5" string="Child Name 5" invisible="children_ShubCreated in ['0', '1', '2', '3', '4']"/>
+#                             <field name="child_gender_5" string="Child Gender 5" invisible="children_ShubCreated in ['0', '1', '2', '3', '4']"/>
+#                         </group>
+#                             <separator/>
+#                             </xpath>
+#                             """)
+#         value = {'name': 'child_name_1',
+#                     'type': 'group',
+#                     'model': 'hr.employee',
+#                     'mode': 'extension',
+#                     'inherit_id': inherit_id.id,
+#                     'arch_base': arch_base,
+#                     'active': True}
+#         self.env['ir.ui.view'].sudo().create(value)
+#         return result
 
 
 

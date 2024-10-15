@@ -18,10 +18,16 @@
             <field name="arch" type="xml">
                 <xpath expr="//form/sheet/notebook/page/group/group[@name='identification_group']" position="after">
                     <group string="Family Status Shub Created">
-                        <label for="marital_ShubCreated" string="Marital Status"/>
                         <field name="marital_ShubCreated"/>
+                        
+                        <!-- for odoo 16 -->
+                        <field name="spouse_complete_name_ShubCreated" attrs="{'invisible': [('marital_ShubCreated', 'not in', ['married', 'cohabitant'])]}"/>
+                        <field name="spouse_birthdate_ShubCreated" attrs="{'invisible': [('marital_ShubCreated', 'not in', ['married', 'cohabitant'])]}"/>
+                        
+                        
+                        <!-- for odoo 17 -->
 
-                        <label for="spouse_complete_name_ShubCreated" string="Spouse Complete Name"
+                        <!-- <label for="spouse_complete_name_ShubCreated" string="Spouse Complete Name"
                                invisible="not (marital_ShubCreated in ['married', 'cohabitant'])"/>
                         <field name="spouse_complete_name_ShubCreated"
                                 invisible="not (marital_ShubCreated in ['married', 'cohabitant'])"
@@ -31,9 +37,8 @@
                                invisible="not (marital_ShubCreated in ['married', 'cohabitant'])"/>
                         <field name="spouse_birthdate_ShubCreated"
                                 invisible="not (marital_ShubCreated in ['married', 'cohabitant'])"
-                                />
+                                /> -->
 
-                        <label for="children_ShubCreated" string="Number of Children"/>
                         <field name="children_ShubCreated"/>
 
                         <!-- The dynamic child details will be inserted here by the Python code -->
