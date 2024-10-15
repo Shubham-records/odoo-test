@@ -19,25 +19,34 @@
                 <xpath expr="//form/sheet/notebook/page/group/group[@name='identification_group']" position="after">
                     <group string="Family Status Shub Created">
                         <label for="marital_ShubCreated" string="Marital Status"/>
-                        <field name="marital_ShubCreated" string="Marital Status"/>
+                        <field name="marital_ShubCreated"/>
 
                         <label for="spouse_complete_name_ShubCreated" string="Spouse Complete Name"
                                invisible="not (marital_ShubCreated in ['married', 'cohabitant'])"/>
-                        <field name="spouse_complete_name_ShubCreated" 
-                               invisible="not (marital_ShubCreated in ['married', 'cohabitant'])" 
-                               string="Spouse Complete Name"/>
+                        <field name="spouse_complete_name_ShubCreated"
+                                invisible="not (marital_ShubCreated in ['married', 'cohabitant'])"
+                                />
 
                         <label for="spouse_birthdate_ShubCreated" string="Spouse DOB"
                                invisible="not (marital_ShubCreated in ['married', 'cohabitant'])"/>
-                        <field name="spouse_birthdate_ShubCreated" 
-                               invisible="not (marital_ShubCreated in ['married', 'cohabitant'])" 
-                               string="Spouse DOB"/>
+                        <field name="spouse_birthdate_ShubCreated"
+                                invisible="not (marital_ShubCreated in ['married', 'cohabitant'])"
+                                />
 
                         <label for="children_ShubCreated" string="Number of Children"/>
-                        <field name="children_ShubCreated" string="Number of Children"/>
+                        <field name="children_ShubCreated"/>
+
+                        <!-- The dynamic child details will be inserted here by the Python code -->
 
 
-                        <group string="Children Details" invisible="children_ShubCreated == 0">
+
+
+
+
+
+
+
+						<!-- <group string="Children Details" invisible="children_ShubCreated == 0">
                             <field name="child_name_1" string="Child Name 1"/>
                             <field name="child_gender_1" string="Child Gender 1"/>
                             
@@ -52,8 +61,7 @@
 
                             <field name="child_name_5" string="Child Name 5" invisible="children_ShubCreated in ['0', '1', '2', '3', '4']"/>
                             <field name="child_gender_5" string="Child Gender 5" invisible="children_ShubCreated in ['0', '1', '2', '3', '4']"/>
-                        </group>
-                        
+                        </group> -->
                     </group>
                 </xpath>
             </field>
